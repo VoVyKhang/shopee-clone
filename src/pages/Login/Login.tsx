@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { rules } from 'src/utils/rules'
+import { getRules } from 'src/utils/rules'
 
 interface FormData {
   email: string
@@ -13,6 +13,8 @@ function Login() {
     handleSubmit,
     formState: { errors }
   } = useForm<FormData>()
+
+  const rules = getRules()
 
   const onSubmit = handleSubmit((data) => {
     console.log(data)
@@ -42,6 +44,7 @@ function Login() {
                   className='p-3 w-full outline-none border border-gray-300 
                   focus:border-gray-500 rounded-sm focus:shadow-sm'
                   placeholder='Password'
+                  autoComplete='on'
                   {...register('password', rules.password)}
                 />
                 <div className='mt-1 text-red-600 min-h-[1rem] text-sm'>{errors.password?.message}</div>
