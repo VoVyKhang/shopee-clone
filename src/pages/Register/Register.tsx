@@ -1,6 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { omit } from 'lodash'
 import { useForm } from 'react-hook-form'
+import { useMutation } from 'react-query'
 import { Link } from 'react-router-dom'
+import { registerAccount } from 'src/apis/auth.api'
 import Input from 'src/components/Input/Input'
 import { Schema, schema } from 'src/utils/rules'
 
@@ -15,8 +18,17 @@ function Register() {
     resolver: yupResolver(schema)
   })
 
+  const registerAccountMutation = useMutation({
+    mutationFn: (body: Omit<FormData, 'confirm_password'>) => registerAccount(body)
+  })
+
   const onSubmit = handleSubmit((data) => {
-    console.log(data)
+    const body = omit(data, ['confirm_password'])
+    registerAccountMutation.mutate(body, {
+      onSuccess: (data) => {
+        console.log(data)
+      }
+    })
   })
 
   return (
@@ -41,7 +53,7 @@ function Register() {
                 type='password'
                 className='mt-2'
                 errorMessage={errors.password?.message}
-                placeholder='Email'
+                placeholder='Password'
                 autoComplete='on'
               />
 
