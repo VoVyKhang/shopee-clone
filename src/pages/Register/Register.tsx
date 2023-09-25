@@ -5,7 +5,9 @@ import { useMutation } from 'react-query'
 import { Link } from 'react-router-dom'
 import { registerAccount } from 'src/apis/auth.api'
 import Input from 'src/components/Input/Input'
+import { ResponseApi } from 'src/types/utils.type'
 import { Schema, schema } from 'src/utils/rules'
+import { isAxiosUnprocessableEntity } from 'src/utils/utils'
 
 type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
 
@@ -13,6 +15,7 @@ function Register() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(schema)
@@ -27,6 +30,19 @@ function Register() {
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
         console.log(data)
+      },
+      onError: (error) => {
+        if (isAxiosUnprocessableEntity<ResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
+          const formError = error.response?.data.data
+          if (formError) {
+            Object.keys(formError).forEach((key) => {
+              setError(key as keyof Omit<FormData, 'confirm_password'>, {
+                message: formError[key as keyof Omit<FormData, 'confirm_password'>],
+                type: 'Server'
+              })
+            })
+          }
+        }
       }
     })
   })
