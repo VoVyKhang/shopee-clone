@@ -1,0 +1,5 @@
+export { default as CartIcon } from './Cart'
+export { default as SearchIcon } from './Search'
+export { default as ArrowDownIcon } from './ArrowDown'
+export { default as GlobalIcon } from './Global'
+export { default as ShopeeIconLogo } from './Shopee'
