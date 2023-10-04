@@ -2,32 +2,11 @@ import { Link } from 'react-router-dom'
 
 import { ArrowDownIcon, CartIcon, GlobalIcon, SearchIcon, ShopeeIconLogo } from '../Icons'
 import { Popover } from '../Popover'
-import { Button } from '../Button'
-
-const renderLanguagePopover = () => (
-  <div className='relative bg-white shadow-md rounded-sm border border-gray-200'>
-    <div className='flex flex-col py-2 px-3 pr-28 pl-3'>
-      <Button className='py-2 px-3 hover:text-orange text-left'>Tiếng Việt</Button>
-      <Button className='py-2 px-3 hover:text-orange text-left'>English</Button>
-    </div>
-  </div>
-)
-
-const renderUserPopover = () => (
-  <div className='relative bg-white shadow-md rounded-sm border border-gray-200'>
-    <div>
-      <Link to='/' className='block w-full text-left py-3 px-4 hover:bg-slate-100 hover:text-cyan-500'>
-        Tài khoản của tôi
-      </Link>
-      <Link to='/' className='block w-full text-left py-3 px-4 hover:bg-slate-100 hover:text-cyan-500'>
-        Đơn mua
-      </Link>
-      <Button className='block py-3 w-full text-left px-4 hover:bg-slate-100 hover:text-cyan-500'>Đăng xuất</Button>
-    </div>
-  </div>
-)
+import usePopover from 'src/hooks/usePopover'
 
 function Header() {
+  const { renderCardPopover, renderLanguagePopover, renderUserPopover } = usePopover()
+
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
       <div className='container'>
@@ -73,10 +52,12 @@ function Header() {
               </button>
             </div>
           </form>
-          <div className='col-span-1 justify-self-end align-bottom'>
-            <Link to='' className='rounded-sm text-white hover:bg-opacity-90'>
-              <CartIcon />
-            </Link>
+          <div className='col-span-1 justify-self-end'>
+            <Popover placement='bottom-end' renderPopover={renderCardPopover()}>
+              <Link to='' className='rounded-sm text-white hover:bg-opacity-90'>
+                <CartIcon />
+              </Link>
+            </Popover>
           </div>
         </div>
       </div>

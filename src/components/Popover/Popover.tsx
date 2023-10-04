@@ -1,6 +1,6 @@
 import { useRef, useId, type ElementType } from 'react'
 
-import { useFloating, FloatingPortal, arrow, shift, offset } from '@floating-ui/react'
+import { useFloating, FloatingPortal, arrow, shift, offset, type Placement } from '@floating-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 import usePopover from 'src/hooks/usePopover'
@@ -10,9 +10,10 @@ interface Props {
   renderPopover: React.ReactNode
   className?: string
   as?: ElementType
+  placement?: Placement
 }
 
-function Popover({ children, renderPopover, className, as: Element = 'div' }: Props) {
+function Popover({ children, renderPopover, className, as: Element = 'div', placement }: Props) {
   const { open, hidePopover, showPopover } = usePopover()
   const id = useId()
   const arrowRef = useRef<HTMLElement>(null)
@@ -23,7 +24,8 @@ function Popover({ children, renderPopover, className, as: Element = 'div' }: Pr
       arrow({
         element: arrowRef
       })
-    ]
+    ],
+    placement: placement
   })
 
   return (
