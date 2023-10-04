@@ -1,74 +1,50 @@
-import { useFloating, FloatingPortal, arrow, shift, offset } from '@floating-ui/react'
-import { motion, AnimatePresence } from 'framer-motion'
-
 import { Link } from 'react-router-dom'
+
 import { ArrowDownIcon, CartIcon, GlobalIcon, SearchIcon, ShopeeIconLogo } from '../Icons'
-import usePopover from 'src/hooks/usePopover'
-import { useRef } from 'react'
+import { Popover } from '../Popover'
+import { Button } from '../Button'
+
+const renderLanguagePopover = () => (
+  <div className='relative bg-white shadow-md rounded-sm border border-gray-200'>
+    <div className='flex flex-col py-2 px-3 pr-28 pl-3'>
+      <Button className='py-2 px-3 hover:text-orange text-left'>Tiếng Việt</Button>
+      <Button className='py-2 px-3 hover:text-orange text-left'>English</Button>
+    </div>
+  </div>
+)
+
+const renderUserPopover = () => (
+  <div className='relative bg-white shadow-md rounded-sm border border-gray-200'>
+    <div>
+      <Link to='/' className='block w-full text-left py-3 px-4 hover:bg-slate-100 hover:text-cyan-500'>
+        Tài khoản của tôi
+      </Link>
+      <Link to='/' className='block w-full text-left py-3 px-4 hover:bg-slate-100 hover:text-cyan-500'>
+        Đơn mua
+      </Link>
+      <Button className='block py-3 w-full text-left px-4 hover:bg-slate-100 hover:text-cyan-500'>Đăng xuất</Button>
+    </div>
+  </div>
+)
 
 function Header() {
-  const arrowRef = useRef<HTMLElement>(null)
-  const { x, y, refs, strategy, middlewareData } = useFloating({
-    middleware: [
-      offset(6),
-      shift(),
-      arrow({
-        element: arrowRef
-      })
-    ]
-  })
-  const { open, hidePopover, showPopover } = usePopover()
-
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
       <div className='container'>
         <div className='flex justify-end'>
-          <div
+          <Popover
             className='flex items-center  py-1 hover:text-gray-300 cursor-pointer'
-            ref={refs.setReference}
-            onMouseEnter={showPopover}
-            onMouseLeave={hidePopover}
+            renderPopover={renderLanguagePopover()}
           >
             <GlobalIcon />
             <span className='mx-1'>Tiếng Việt</span>
             <ArrowDownIcon />
-            <FloatingPortal>
-              <AnimatePresence>
-                {open && (
-                  <motion.div
-                    ref={refs.setFloating}
-                    style={{
-                      position: strategy,
-                      left: x ?? 0,
-                      top: y ?? 0,
-                      width: 'max-content',
-                      transformOrigin: `${middlewareData.arrow?.x}px top`
-                    }}
-                    initial={{ opacity: 0, transform: 'scale(0)' }}
-                    animate={{ opacity: 1, transform: 'scale(1)' }}
-                    exit={{ opacity: 0, transform: 'scale(0)' }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <span
-                      ref={arrowRef}
-                      className='border-x-transparent border-t-transparent border-[11px] absolute border-b-white translate-y-[-95%] z-10'
-                      style={{
-                        left: middlewareData.arrow?.x,
-                        top: middlewareData.arrow?.y
-                      }}
-                    />
-                    <div className='relative bg-white shadow-md rounded-sm border border-gray-200'>
-                      <div className='flex flex-col py-2 px-3'>
-                        <button className='py-2 px-3 hover:text-orange'>Tiếng Việt</button>
-                        <button className='py-2 px-3 hover:text-orange'>English</button>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </FloatingPortal>
-          </div>
-          <div className='flex items-center  py-1 hover:text-gray-300 cursor-pointer ml-6'>
+          </Popover>
+
+          <Popover
+            className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'
+            renderPopover={renderUserPopover()}
+          >
             <div className='w-5 h-5 mr-2 flex-shrink-0'>
               <img
                 src='https://down-vn.img.susercontent.com/file/vn-11134004-7r98o-lm70dawd3g7zd8_tn'
@@ -77,7 +53,7 @@ function Header() {
               />
             </div>
             <div>vovykhang</div>
-          </div>
+          </Popover>
         </div>
 
         <div className='grid grid-cols-12 gap-4 mt-4 items-end'>
