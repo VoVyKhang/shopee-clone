@@ -25,7 +25,7 @@ function usePopover() {
   const renderUserPopover = () => (
     <div className='relative bg-white shadow-md rounded-sm border border-gray-200'>
       <div>
-        <Link to='/' className='block w-full text-left py-3 px-4 hover:bg-slate-100 hover:text-cyan-500'>
+        <Link to='/profile' className='block w-full text-left py-3 px-4 hover:bg-slate-100 hover:text-cyan-500'>
           Tài khoản của tôi
         </Link>
         <Link to='/' className='block w-full text-left py-3 px-4 hover:bg-slate-100 hover:text-cyan-500'>
