@@ -2,11 +2,12 @@ import { useState, useContext } from 'react'
 import { useMutation } from 'react-query'
 import { Link } from 'react-router-dom'
 import { logout } from 'src/apis/auth.api'
+import path from 'src/constants/path'
 import { AppContext } from 'src/context/app.context'
 
 function usePopover() {
   const [open, setOpen] = useState(false)
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
 
   const showPopover = () => {
     setOpen(true)
@@ -20,6 +21,7 @@ function usePopover() {
     mutationFn: logout,
     onSuccess: () => {
       setIsAuthenticated(false)
+      setProfile(null)
     }
   })
 
@@ -39,7 +41,7 @@ function usePopover() {
   const renderUserPopover = () => (
     <div className='relative bg-white shadow-md rounded-sm border border-gray-200'>
       <div>
-        <Link to='/profile' className='block w-full text-left py-3 px-4 hover:bg-slate-100 hover:text-cyan-500'>
+        <Link to={path.profile} className='block w-full text-left py-3 px-4 hover:bg-slate-100 hover:text-cyan-500'>
           Tài khoản của tôi
         </Link>
         <Link to='/' className='block w-full text-left py-3 px-4 hover:bg-slate-100 hover:text-cyan-500'>

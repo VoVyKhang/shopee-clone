@@ -1,13 +1,17 @@
 import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios'
 import { toast } from 'react-toastify'
 import { AuthResponse } from 'src/types/auth.type'
-import { clearAccessTokenFromLS, getAccessTokenFromLS, saveAccessTokenToLS } from './auth'
+import { clearLS, getAccessTokenFromLS, getProfileFromLS, setAccessTokenToLS, setProfileToLS } from './auth'
+import path from 'src/constants/path'
+import { User } from 'src/types/user.type'
 
 class Http {
   instance: AxiosInstance
   private accessToken: string
+  private profile: User | null
   constructor() {
     this.accessToken = getAccessTokenFromLS()
+    this.profile = getProfileFromLS()
     this.instance = axios.create({
       baseURL: 'https://api-ecom.duthanhduoc.com/',
       timeout: 10000,
@@ -33,12 +37,18 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config
-        if (url === '/login' || url === '/register') {
-          this.accessToken = (response.data as AuthResponse).data.access_token
-          saveAccessTokenToLS(this.accessToken)
-        } else if (url === '/logout') {
+        if (url === path.login || url === path.register) {
+          const data = response.data as AuthResponse
+
+          this.accessToken = data.data.access_token
+          this.profile = data.data.user
+
+          setAccessTokenToLS(this.accessToken)
+          setProfileToLS(this.profile)
+        } else if (url === path.logout) {
           this.accessToken = ''
-          clearAccessTokenFromLS()
+          this.profile = null
+          clearLS()
         }
         return response
       },

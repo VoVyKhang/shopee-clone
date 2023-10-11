@@ -5,17 +5,18 @@ import { Popover } from '../Popover'
 import usePopover from 'src/hooks/usePopover'
 import { useContext } from 'react'
 import { AppContext } from 'src/context/app.context'
+import path from 'src/constants/path'
 
 function Header() {
   const { renderCardPopover, renderLanguagePopover, renderUserPopover } = usePopover()
-  const { isAuthenticated } = useContext(AppContext)
+  const { isAuthenticated, profile } = useContext(AppContext)
 
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
       <div className='container'>
         <div className='flex justify-end'>
           <Popover
-            className='flex items-center  py-1 hover:text-gray-300 cursor-pointer'
+            className='flex items-center  py-1 hover:text-white/70 cursor-pointer'
             renderPopover={renderLanguagePopover()}
           >
             <GlobalIcon />
@@ -25,7 +26,7 @@ function Header() {
 
           {isAuthenticated && (
             <Popover
-              className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'
+              className='flex items-center py-1 hover:text-white/70 cursor-pointer ml-6'
               renderPopover={renderUserPopover()}
             >
               <div className='w-5 h-5 mr-2 flex-shrink-0'>
@@ -35,17 +36,17 @@ function Header() {
                   className='w-full h-full object-cover rounded-full'
                 />
               </div>
-              <div>vovykhang</div>
+              <div>{profile?.email} </div>
             </Popover>
           )}
 
           {!isAuthenticated && (
             <div className='flex items-center'>
-              <Link to='/register' className='mx-3 capitalize hover:text-white/70'>
+              <Link to={path.register} className='mx-3 capitalize hover:text-white/70'>
                 Đăng ký
               </Link>
               <div className='border-r-[1px] border-r-white h-4' />
-              <Link to='/login' className='mx-3 capitalize hover:text-white/70'>
+              <Link to={path.login} className='mx-3 capitalize hover:text-white/70'>
                 Đăng nhập
               </Link>
             </div>
