@@ -1,17 +1,22 @@
+import { useContext } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { omit } from 'lodash'
 import { useForm } from 'react-hook-form'
 import { useMutation } from 'react-query'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { registerAccount } from 'src/apis/auth.api'
 import Input from 'src/components/Input/Input'
-import { ResponseApi } from 'src/types/utils.type'
+import { ErrorResponseApi } from 'src/types/utils.type'
 import { Schema, schema } from 'src/utils/rules'
 import { isAxiosUnprocessableEntity } from 'src/utils/utils'
+import { AppContext } from 'src/context/app.context'
 
 type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
 
 function Register() {
+  const { setIsAuthenticated } = useContext(AppContext)
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -28,11 +33,12 @@ function Register() {
   const onSubmit = handleSubmit((data) => {
     const body = omit(data, ['confirm_password'])
     registerAccountMutation.mutate(body, {
-      onSuccess: (data) => {
-        console.log(data)
+      onSuccess: () => {
+        setIsAuthenticated(true)
+        navigate('/')
       },
       onError: (error) => {
-        if (isAxiosUnprocessableEntity<ResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
+        if (isAxiosUnprocessableEntity<ErrorResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
           const formError = error.response?.data.data
           if (formError) {
             Object.keys(formError).forEach((key) => {

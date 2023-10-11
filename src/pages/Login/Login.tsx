@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Schema, schema } from 'src/utils/rules'
@@ -6,12 +7,16 @@ import Input from 'src/components/Input/Input'
 import { useMutation } from 'react-query'
 import { login } from 'src/apis/auth.api'
 import { isAxiosUnprocessableEntity } from 'src/utils/utils'
-import { ResponseApi } from 'src/types/utils.type'
+import { ErrorResponseApi } from 'src/types/utils.type'
+import { AppContext } from 'src/context/app.context'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginScheme = schema.pick(['email', 'password'])
 
 function Login() {
+  const { setIsAuthenticated } = useContext(AppContext)
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -27,11 +32,12 @@ function Login() {
 
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutate(data, {
-      onSuccess: (data) => {
-        console.log(data)
+      onSuccess: () => {
+        setIsAuthenticated(true)
+        navigate('/')
       },
       onError: (error) => {
-        if (isAxiosUnprocessableEntity<ResponseApi<FormData>>(error)) {
+        if (isAxiosUnprocessableEntity<ErrorResponseApi<FormData>>(error)) {
           const formError = error.response?.data.data
           if (formError) {
             Object.keys(formError).forEach((key) => {
@@ -68,7 +74,7 @@ function Login() {
                 type='password'
                 className='mt-2'
                 errorMessage={errors.password?.message}
-                placeholder='Email'
+                placeholder='Password'
                 autoComplete='on'
               />
 

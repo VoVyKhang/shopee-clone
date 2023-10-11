@@ -1,9 +1,12 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { useMutation } from 'react-query'
 import { Link } from 'react-router-dom'
-import { Button } from 'src/components/Button'
+import { logout } from 'src/apis/auth.api'
+import { AppContext } from 'src/context/app.context'
 
 function usePopover() {
   const [open, setOpen] = useState(false)
+  const { setIsAuthenticated } = useContext(AppContext)
 
   const showPopover = () => {
     setOpen(true)
@@ -13,11 +16,22 @@ function usePopover() {
     setOpen(false)
   }
 
+  const logoutMutation = useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      setIsAuthenticated(false)
+    }
+  })
+
+  const handleLogout = () => {
+    logoutMutation.mutate()
+  }
+
   const renderLanguagePopover = () => (
     <div className='relative bg-white shadow-md rounded-sm border border-gray-200'>
       <div className='flex flex-col py-2 px-3 pr-28 pl-3'>
-        <Button className='py-2 px-3 hover:text-orange text-left'>Tiếng Việt</Button>
-        <Button className='py-2 px-3 hover:text-orange text-left'>English</Button>
+        <button className='py-2 px-3 hover:text-orange text-left'>Tiếng Việt</button>
+        <button className='py-2 px-3 hover:text-orange text-left'>English</button>
       </div>
     </div>
   )
@@ -31,7 +45,12 @@ function usePopover() {
         <Link to='/' className='block w-full text-left py-3 px-4 hover:bg-slate-100 hover:text-cyan-500'>
           Đơn mua
         </Link>
-        <Button className='block py-3 w-full text-left px-4 hover:bg-slate-100 hover:text-cyan-500'>Đăng xuất</Button>
+        <button
+          className='block py-3 w-full text-left px-4 hover:bg-slate-100 hover:text-cyan-500'
+          onClick={handleLogout}
+        >
+          Đăng xuất
+        </button>
       </div>
     </div>
   )
@@ -103,9 +122,9 @@ function usePopover() {
         </div>
         <div className='flex justify-between items-center'>
           <div className='capitalize text-xs text-gray-500'>Them hang vao gio</div>
-          <Button className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
+          <button className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
             Xem gio hang
-          </Button>
+          </button>
         </div>
       </div>
     </div>

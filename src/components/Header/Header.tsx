@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom'
 import { ArrowDownIcon, CartIcon, GlobalIcon, SearchIcon, ShopeeIconLogo } from '../Icons'
 import { Popover } from '../Popover'
 import usePopover from 'src/hooks/usePopover'
+import { useContext } from 'react'
+import { AppContext } from 'src/context/app.context'
 
 function Header() {
   const { renderCardPopover, renderLanguagePopover, renderUserPopover } = usePopover()
+  const { isAuthenticated } = useContext(AppContext)
 
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
@@ -20,19 +23,33 @@ function Header() {
             <ArrowDownIcon />
           </Popover>
 
-          <Popover
-            className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'
-            renderPopover={renderUserPopover()}
-          >
-            <div className='w-5 h-5 mr-2 flex-shrink-0'>
-              <img
-                src='https://down-vn.img.susercontent.com/file/vn-11134004-7r98o-lm70dawd3g7zd8_tn'
-                alt='avatar'
-                className='w-full h-full object-cover rounded-full'
-              />
+          {isAuthenticated && (
+            <Popover
+              className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-6'
+              renderPopover={renderUserPopover()}
+            >
+              <div className='w-5 h-5 mr-2 flex-shrink-0'>
+                <img
+                  src='https://down-vn.img.susercontent.com/file/vn-11134004-7r98o-lm70dawd3g7zd8_tn'
+                  alt='avatar'
+                  className='w-full h-full object-cover rounded-full'
+                />
+              </div>
+              <div>vovykhang</div>
+            </Popover>
+          )}
+
+          {!isAuthenticated && (
+            <div className='flex items-center'>
+              <Link to='/register' className='mx-3 capitalize hover:text-white/70'>
+                Đăng ký
+              </Link>
+              <div className='border-r-[1px] border-r-white h-4' />
+              <Link to='/login' className='mx-3 capitalize hover:text-white/70'>
+                Đăng nhập
+              </Link>
             </div>
-            <div>vovykhang</div>
-          </Popover>
+          )}
         </div>
 
         <div className='grid grid-cols-12 gap-4 mt-4 items-end'>
