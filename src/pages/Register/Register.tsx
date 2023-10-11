@@ -10,6 +10,7 @@ import { ErrorResponseApi } from 'src/types/utils.type'
 import { Schema, schema } from 'src/utils/rules'
 import { isAxiosUnprocessableEntity } from 'src/utils/utils'
 import { AppContext } from 'src/context/app.context'
+import { Button } from 'src/components/Button'
 
 type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
 
@@ -90,13 +91,15 @@ function Register() {
               />
 
               <div className='mt-2'>
-                <button
+                <Button
                   type='submit'
-                  className='w-full text-center py-4 px-2 
-            uppercase bg-red-500 text-white text-sm hover:bg-red-600'
+                  className='w-full py-4 px-2 
+            uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex justify-center items-center'
+                  isLoading={registerAccountMutation.isLoading}
+                  disabled={registerAccountMutation.isLoading}
                 >
                   Đăng ký
-                </button>
+                </Button>
               </div>
 
               <div className='mt-8 flex justify-center items-center'>

@@ -9,6 +9,7 @@ import { login } from 'src/apis/auth.api'
 import { isAxiosUnprocessableEntity } from 'src/utils/utils'
 import { ErrorResponseApi } from 'src/types/utils.type'
 import { AppContext } from 'src/context/app.context'
+import { Button } from 'src/components/Button'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginScheme = schema.pick(['email', 'password'])
@@ -79,13 +80,15 @@ function Login() {
               />
 
               <div className='mt-3'>
-                <button
+                <Button
                   type='submit'
-                  className='w-full text-center py-4 px-2 
-                uppercase bg-red-500 text-white text-sm hover:bg-red-600'
+                  className='w-full py-4 px-2 
+                uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex justify-center items-center'
+                  isLoading={loginMutation.isLoading}
+                  disabled={loginMutation.isLoading}
                 >
                   Đăng nhập
-                </button>
+                </Button>
               </div>
 
               <div className='mt-8 flex justify-center items-center'>
