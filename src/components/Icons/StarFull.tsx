@@ -1,6 +1,6 @@
-function StarFull() {
+function StarFull({ className }: { className: string }) {
   return (
-    <svg viewBox='0 0 9.5 8' className='w-4 h-4 mr-1'>
+    <svg viewBox='0 0 9.5 8' className={className}>
       <defs>
         <linearGradient id='ratingStarGradient' x1='50%' x2='50%' y1='0%' y2='100%'>
           <stop offset={0} stopColor='#ffca11' />

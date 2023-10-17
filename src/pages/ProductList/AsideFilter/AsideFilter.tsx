@@ -70,7 +70,7 @@ function AsideFilter() {
             {Array(5)
               .fill(0)
               .map((_, index) => (
-                <StarFull key={index} />
+                <StarFull key={index} className='w-4 h-4 mr-1' />
               ))}
             <span>Trở lên</span>
           </Link>
@@ -80,7 +80,7 @@ function AsideFilter() {
             {Array(5)
               .fill(0)
               .map((_, index) => (
-                <StarFull key={index} />
+                <StarFull key={index} className='w-4 h-4 mr-1' />
               ))}
             <span>Trở lên</span>
           </Link>
