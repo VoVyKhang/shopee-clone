@@ -4,7 +4,8 @@ import { omit } from 'lodash'
 import { useForm } from 'react-hook-form'
 import { useMutation } from 'react-query'
 import { Link, useNavigate } from 'react-router-dom'
-import { registerAccount } from 'src/apis/auth.api'
+
+import authApi from 'src/apis/auth.api'
 import Input from 'src/components/Input/Input'
 import { ErrorResponseApi } from 'src/types/utils.type'
 import { Schema, schema } from 'src/utils/rules'
@@ -28,7 +29,7 @@ function Register() {
   })
 
   const registerAccountMutation = useMutation({
-    mutationFn: (body: Omit<FormData, 'confirm_password'>) => registerAccount(body)
+    mutationFn: (body: Omit<FormData, 'confirm_password'>) => authApi.registerAccount(body)
   })
 
   const onSubmit = handleSubmit((data) => {

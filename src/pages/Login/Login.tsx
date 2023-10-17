@@ -2,10 +2,11 @@ import { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+
 import { Schema, schema } from 'src/utils/rules'
 import Input from 'src/components/Input/Input'
 import { useMutation } from 'react-query'
-import { login } from 'src/apis/auth.api'
+import authApi from 'src/apis/auth.api'
 import { isAxiosUnprocessableEntity } from 'src/utils/utils'
 import { ErrorResponseApi } from 'src/types/utils.type'
 import { AppContext } from 'src/context/app.context'
@@ -28,7 +29,7 @@ function Login() {
   })
 
   const loginMutation = useMutation({
-    mutationFn: (body: Omit<FormData, 'confirm_password'>) => login(body)
+    mutationFn: (body: Omit<FormData, 'confirm_password'>) => authApi.login(body)
   })
 
   const onSubmit = handleSubmit((data) => {

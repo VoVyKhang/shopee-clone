@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react'
 import { useMutation } from 'react-query'
 import { Link } from 'react-router-dom'
-import { logout } from 'src/apis/auth.api'
+import authApi from 'src/apis/auth.api'
 import path from 'src/constants/path'
 import { AppContext } from 'src/context/app.context'
 
@@ -18,7 +18,7 @@ function usePopover() {
   }
 
   const logoutMutation = useMutation({
-    mutationFn: logout,
+    mutationFn: authApi.logout,
     onSuccess: () => {
       setIsAuthenticated(false)
       setProfile(null)
