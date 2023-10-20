@@ -1,31 +1,58 @@
-import { Link } from 'react-router-dom'
+import { Link, createSearchParams } from 'react-router-dom'
 import { Button } from 'src/components/Button'
 import { ArrowRightIcon, FilterIcon, ListIcon } from 'src/components/Icons'
 import StarFull from 'src/components/Icons/StarFull'
 import { Input } from 'src/components/Input'
 import path from 'src/constants/path'
+import { QueryConfig } from '../ProductList'
+import { Category } from 'src/types/category.type'
+import classNames from 'classnames'
 
-function AsideFilter() {
+interface Props {
+  queryConfig: QueryConfig
+  categories: Category[]
+}
+
+function AsideFilter({ queryConfig, categories }: Props) {
+  const { category } = queryConfig
+
   return (
     <div className='py-4'>
-      <Link to={path.home} className='flex items-center font-bold '>
+      <Link
+        to={path.home}
+        className={classNames('flex items-center font-bold ', {
+          'text-orange': !category
+        })}
+      >
         <ListIcon />
         Tất cả danh mục
       </Link>
       <div className='bg-gray-300 h-[1px] my-4' />
 
       <ul>
-        <li className='py-2 pl-2'>
-          <Link to={path.home} className='relative px-2 text-orange font-semibold'>
-            <ArrowRightIcon />
-            Thời trang nam
-          </Link>
-        </li>
-        <li className='py-2 pl-2'>
-          <Link to={path.home} className='relative px-2'>
-            Điện thoại
-          </Link>
-        </li>
+        {categories.map((categoryItem) => {
+          const isActive = categoryItem._id === category
+
+          return (
+            <li key={categoryItem._id} className='py-2 pl-2'>
+              <Link
+                to={{
+                  pathname: path.home,
+                  search: createSearchParams({
+                    ...queryConfig,
+                    category: categoryItem._id
+                  }).toString()
+                }}
+                className={classNames('relative px-2 ', {
+                  'text-orange font-semibold': isActive
+                })}
+              >
+                {isActive && <ArrowRightIcon />}
+                {categoryItem.name}
+              </Link>
+            </li>
+          )
+        })}
       </ul>
 
       <Link to={path.home} className='flex items-center font-bold mt-4 uppercase'>
