@@ -1,20 +1,63 @@
-import { Link, createSearchParams } from 'react-router-dom'
+import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import { Button } from 'src/components/Button'
 import { ArrowRightIcon, FilterIcon, ListIcon } from 'src/components/Icons'
-import StarFull from 'src/components/Icons/StarFull'
-import { Input } from 'src/components/Input'
 import path from 'src/constants/path'
 import { QueryConfig } from '../ProductList'
 import { Category } from 'src/types/category.type'
 import classNames from 'classnames'
+import { InputNumber } from 'src/components/InputNumber'
+import { Controller, useForm } from 'react-hook-form'
+import { Schema, schema } from 'src/utils/rules'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { NoUndefinedField } from 'src/types/utils.type'
+import { RatingStars } from '../RatingStars'
+import { omit } from 'lodash'
 
 interface Props {
   queryConfig: QueryConfig
   categories: Category[]
 }
 
+type FormData = NoUndefinedField<Pick<Schema, 'price_min' | 'price_max'>>
+
+const priceScheme = schema.pick(['price_min', 'price_max'])
+
 function AsideFilter({ queryConfig, categories }: Props) {
   const { category } = queryConfig
+  const navigate = useNavigate()
+
+  const {
+    control,
+    handleSubmit,
+    trigger,
+    formState: { errors }
+  } = useForm<FormData>({
+    defaultValues: {
+      price_min: '',
+      price_max: ''
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: yupResolver<any>(priceScheme),
+    shouldFocusError: false
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams({
+        ...queryConfig,
+        price_min: data.price_min,
+        price_max: data.price_max
+      }).toString()
+    })
+  })
+
+  const handleRemoveAll = () => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(omit(queryConfig, ['price_min', 'price_max', 'rating_filter', 'category'])).toString()
+    })
+  }
 
   return (
     <div className='py-4'>
@@ -63,26 +106,55 @@ function AsideFilter({ queryConfig, categories }: Props) {
 
       <div className='my-5'>
         <div>Khoản giá </div>
-        <form className='mt-2'>
+        <form className='mt-2' onSubmit={onSubmit}>
           <div className='flex items-start'>
-            <Input
-              type='text'
-              className='grow'
-              name='from'
-              placeholder='đ TỪ'
-              classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
+            <Controller
+              control={control}
+              name='price_min'
+              render={({ field }) => {
+                return (
+                  <InputNumber
+                    {...field}
+                    type='text'
+                    className='grow'
+                    placeholder='đ TỪ'
+                    classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
+                    classNameError='hidden'
+                    onChange={(event) => {
+                      field.onChange(event)
+                      trigger('price_max')
+                    }}
+                    value={field.value}
+                    ref={field.ref}
+                  />
+                )
+              }}
             />
 
             <div className='mx-2 mt-2 shrink-0'>-</div>
 
-            <Input
-              type='text'
-              className='grow'
-              name='from'
-              placeholder='đ ĐẾN'
-              classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
+            <Controller
+              control={control}
+              name='price_max'
+              render={({ field }) => {
+                return (
+                  <InputNumber
+                    {...field}
+                    type='text'
+                    className='grow'
+                    placeholder='đ ĐẾN'
+                    classNameInput='p-1 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
+                    classNameError='hidden'
+                    onChange={(event) => {
+                      field.onChange(event)
+                      trigger('price_min')
+                    }}
+                  />
+                )
+              }}
             />
           </div>
+          <div className='mt-1 text-red-600 min-h-[1rem] text-sm text-center'>{errors.price_min?.message}</div>
           <Button className='w-full p-2 uppercase bg-orange text-white text-sm hover:bg-orange/80 flex justify-center items-center'>
             Áp dụng
           </Button>
@@ -91,30 +163,12 @@ function AsideFilter({ queryConfig, categories }: Props) {
 
       <div className='bg-gray-300 h-[1px] my-4' />
       <div className='text-sm'>Đánh giá</div>
-      <ul className='my-3'>
-        <li className='py-1 pl-2'>
-          <Link to='' className='flex items-center text-sm'>
-            {Array(5)
-              .fill(0)
-              .map((_, index) => (
-                <StarFull key={index} className='w-4 h-4 mr-1' />
-              ))}
-            <span>Trở lên</span>
-          </Link>
-        </li>
-        <li className='py-1 pl-2'>
-          <Link to='' className='flex items-center text-sm'>
-            {Array(5)
-              .fill(0)
-              .map((_, index) => (
-                <StarFull key={index} className='w-4 h-4 mr-1' />
-              ))}
-            <span>Trở lên</span>
-          </Link>
-        </li>
-      </ul>
+      <RatingStars queryConfig={queryConfig} />
       <div className='bg-gray-300 h-[1px] my-4' />
-      <Button className='w-full p-2 uppercase bg-orange text-white text-sm hover:bg-orange/80 flex justify-center items-center'>
+      <Button
+        onClick={handleRemoveAll}
+        className='w-full p-2 uppercase bg-orange text-white text-sm hover:bg-orange/80 flex justify-center items-center'
+      >
         Xóa tất cả
       </Button>
     </div>

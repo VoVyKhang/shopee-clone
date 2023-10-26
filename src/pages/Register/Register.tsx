@@ -14,6 +14,7 @@ import { AppContext } from 'src/context/app.context'
 import { Button } from 'src/components/Button'
 
 type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
+const registerSchema = schema.pick(['email', 'password', 'confirm_password'])
 
 function Register() {
   const { setIsAuthenticated, setProfile } = useContext(AppContext)
@@ -25,7 +26,7 @@ function Register() {
     setError,
     formState: { errors }
   } = useForm<FormData>({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(registerSchema)
   })
 
   const registerAccountMutation = useMutation({
