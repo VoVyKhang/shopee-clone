@@ -2,7 +2,7 @@ import { createSearchParams, useNavigate } from 'react-router-dom'
 import { StarEmptyIcon } from 'src/components/Icons'
 import StarFull from 'src/components/Icons/StarFull'
 import path from 'src/constants/path'
-import { QueryConfig } from '../ProductList'
+import { QueryConfig } from '../../ProductList'
 
 interface Props {
   queryConfig: QueryConfig

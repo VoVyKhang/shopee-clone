@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon } from 'src/components/Icons'
-import { QueryConfig } from '../ProductList'
+import { QueryConfig } from '../../ProductList'
 import { sortBy, order as OrderConstant } from 'src/constants/product'
 import classNames from 'classnames'
 import { ProductListConfig } from 'src/types/product.type'
@@ -108,7 +108,7 @@ function SortProductList({ queryConfig, pageSize }: Props) {
           <div className='ml-2 flex'>
             {page === 1 ? (
               <span className='flex w-9 justify-center items-center h-8 rounded-tl-sm rounded-bl-sm bg-white/60 hover:bg-slate-100 cursor-not-allowed shadow'>
-                <ChevronLeftIcon />
+                <ChevronLeftIcon className='w-3 h-3' />
               </span>
             ) : (
               <Link
@@ -121,13 +121,13 @@ function SortProductList({ queryConfig, pageSize }: Props) {
                 }}
                 className='flex w-9 justify-center items-center h-8 rounded-tl-sm rounded-bl-sm bg-white hover:bg-slate-100  shadow'
               >
-                <ChevronLeftIcon />
+                <ChevronLeftIcon className='w-3 h-3' />
               </Link>
             )}
 
             {page === pageSize ? (
               <span className='flex w-9 justify-center items-center h-8 rounded-tl-sm rounded-bl-sm bg-white/60 hover:bg-slate-100 cursor-not-allowed shadow'>
-                <ChevronRightIcon />
+                <ChevronRightIcon className='w-3 h-3' />
               </span>
             ) : (
               <Link
@@ -140,7 +140,7 @@ function SortProductList({ queryConfig, pageSize }: Props) {
                 }}
                 className='flex w-9 justify-center items-center h-8 rounded-tl-sm rounded-bl-sm bg-white hover:bg-slate-100  shadow'
               >
-                <ChevronRightIcon />
+                <ChevronRightIcon className='w-3 h-3' />
               </Link>
             )}
           </div>

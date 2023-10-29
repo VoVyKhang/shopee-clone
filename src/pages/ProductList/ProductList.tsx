@@ -1,12 +1,12 @@
 import { useQuery } from 'react-query'
-import { AsideFilter } from './AsideFilter'
-import { Product } from './Product'
-import { SortProductList } from './SortProductList'
-import useQueryParams from 'src/hooks/useQueryParams'
-import productApi from 'src/apis/product.api'
+import { AsideFilter } from './components/AsideFilter'
+import { Product } from './components/Product'
+import { SortProductList } from './components/SortProductList'
 import { Pagination } from 'src/components/Pagination'
 import { ProductListConfig } from 'src/types/product.type'
 import { omitBy, isUndefined } from 'lodash'
+import useQueryParams from 'src/hooks/useQueryParams'
+import productApi from 'src/apis/product.api'
 import categoryApi from 'src/apis/category.api'
 
 export type QueryConfig = {

@@ -1,4 +1,4 @@
-function ChevronRight({ className }: { className: string }) {
+function Minus({ className }: { className: string }) {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -8,9 +8,9 @@ function ChevronRight({ className }: { className: string }) {
       stroke='currentColor'
       className={className}
     >
-      <path strokeLinecap='round' strokeLinejoin='round' d='M8.25 4.5l7.5 7.5-7.5 7.5' />
+      <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 12h-15' />
     </svg>
   )
 }
 
-export default ChevronRight
+export default Minus
