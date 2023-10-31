@@ -3,14 +3,15 @@ import { useParams } from 'react-router-dom'
 import { ChevronLeftIcon, ChevronRightIcon, MinusIcon, PlusIcon, ShoppingCartIcon } from 'src/components/Icons'
 import { InputNumber } from 'src/components/InputNumber'
 import { ProductRating } from 'src/components/ProductRating'
-import { formatCurrency, formatNumberToSocialStyle, rateSale } from 'src/utils/utils'
+import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from 'src/utils/utils'
 import { useMemo, useState, useEffect, useRef } from 'react'
 import { Product } from 'src/types/product.type'
 import DOMPurify from 'dompurify'
 import productApi from 'src/apis/product.api'
 
 function ProductDetail() {
-  const { id } = useParams()
+  const { nameId } = useParams()
+  const id = getIdFromNameId(nameId as string)
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
   const [activeImage, setActiveImage] = useState('')
   const imageRef = useRef<HTMLImageElement>(null)
