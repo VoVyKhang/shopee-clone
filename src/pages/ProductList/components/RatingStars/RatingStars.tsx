@@ -38,7 +38,7 @@ function RatingStars({ queryConfig }: Props) {
                 .fill(0)
                 .map((_, indexStar) => {
                   if (indexStar < 5 - index) {
-                    return <StarFull key={indexStar} className='w-4 h-4 mr-1' />
+                    return <StarFull key={indexStar} className='w-4 h-4 mr-1 fill-yellow-400' />
                   }
                   return <StarEmptyIcon key={indexStar} className='w-4 h-4 mr-1' />
                 })}
