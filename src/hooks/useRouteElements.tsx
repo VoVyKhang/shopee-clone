@@ -1,9 +1,10 @@
+import path from 'src/constants/path'
 import { useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
-import path from 'src/constants/path'
 import { AppContext } from 'src/context/app.context'
 import { MainLayout } from 'src/layouts/MainLayout'
 import { RegisterLayout } from 'src/layouts/RegisterLayout'
+import { Cart } from 'src/pages/Cart'
 import { Login } from 'src/pages/Login'
 import { ProductDetail } from 'src/pages/ProductDetail'
 import { ProductList } from 'src/pages/ProductList'
@@ -54,6 +55,14 @@ function useRouteElements() {
           element: (
             <MainLayout>
               <Profile />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.cart,
+          element: (
+            <MainLayout>
+              <Cart />
             </MainLayout>
           )
         }

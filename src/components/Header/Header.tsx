@@ -16,10 +16,12 @@ import { purchasesStatus } from 'src/constants/purchase'
 import purchaseApi from 'src/apis/purchase.api'
 import noProduct from 'src/assets/images/no-product.png'
 import { formatCurrency } from 'src/utils/utils'
+import { queryClient } from 'src/main'
 
 type FomData = Pick<Schema, 'name'>
 const nameSchema = schema.pick(['name'])
 const MAX_PURCHASES = 5
+
 function Header() {
   const { isAuthenticated, profile } = useContext(AppContext)
   const queryConfig = useQueryConfig()
@@ -78,13 +80,13 @@ function Header() {
             <div className='capitalize text-xs text-gray-500'>
               {purchaseInCart.length > MAX_PURCHASES ? purchaseInCart.length - MAX_PURCHASES : ''} Thêm hàng vào giỏ
             </div>
-            <button className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
+            <Link to={path.cart} className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
               Xem gio hang
-            </button>
+            </Link>
           </div>
         </div>
       ) : (
-        <div className='p-2 w-[300px] h-[300px] flex items-center justify-center'>
+        <div className='p-2 w-[300px] h-[300px] flex flex-col items-center justify-center'>
           <img src={noProduct} alt='no purchase' className='w-24 h-24' />
           <div className='mt-3 capitalize'>Chưa có sản phẩm</div>
         </div>
@@ -97,6 +99,7 @@ function Header() {
     onSuccess: () => {
       setIsAuthenticated(false)
       setProfile(null)
+      queryClient.removeQueries({ queryKey: ['purchases', { status: purchasesStatus.inCart }] })
     }
   })
 
@@ -133,7 +136,8 @@ function Header() {
 
   const { data: purchasesInCart } = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
-    queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart })
+    queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart }),
+    enabled: isAuthenticated
   })
 
   const purchaseInCart = purchasesInCart?.data.data
@@ -201,9 +205,11 @@ function Header() {
             <Popover placement='bottom-end' renderPopover={renderCardPopover()}>
               <Link to='/' className='relative rounded-sm text-white hover:bg-opacity-90'>
                 <CartIcon />
-                <span className='absolute top-[-5px] left-[17px] bg-white rounded-full px-[9px] py-[1px] text-orange text-xs'>
-                  {purchaseInCart?.length}
-                </span>
+                {purchaseInCart && (
+                  <span className='absolute top-[-5px] left-[17px] bg-white rounded-full px-[9px] py-[1px] text-orange text-xs'>
+                    {purchaseInCart?.length}
+                  </span>
+                )}
               </Link>
             </Popover>
           </div>
