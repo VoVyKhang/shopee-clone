@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useParams } from 'react-router-dom'
 import { ChevronLeftIcon, ChevronRightIcon, ShoppingCartIcon } from 'src/components/Icons'
 import { ProductRating } from 'src/components/ProductRating'
@@ -10,7 +10,6 @@ import { QuantityController } from 'src/components/QuantityController'
 import productApi from 'src/apis/product.api'
 import DOMPurify from 'dompurify'
 import purchaseApi from 'src/apis/purchase.api'
-import { queryClient } from 'src/main'
 import { purchasesStatus } from 'src/constants/purchase'
 import { toast } from 'react-toastify'
 
@@ -21,6 +20,7 @@ function ProductDetail() {
   const [activeImage, setActiveImage] = useState('')
   const [buyCount, setBuyCount] = useState(1)
   const imageRef = useRef<HTMLImageElement>(null)
+  const queryClient = useQueryClient()
 
   const { data: productDetailData } = useQuery({
     queryKey: ['product', id],

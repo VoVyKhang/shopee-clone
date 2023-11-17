@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 
 import { ArrowDownIcon, CartIcon, GlobalIcon, SearchIcon, ShopeeIconLogo } from '../Icons'
 import { Popover } from '../Popover'
@@ -16,7 +16,6 @@ import { purchasesStatus } from 'src/constants/purchase'
 import purchaseApi from 'src/apis/purchase.api'
 import noProduct from 'src/assets/images/no-product.png'
 import { formatCurrency } from 'src/utils/utils'
-import { queryClient } from 'src/main'
 
 type FomData = Pick<Schema, 'name'>
 const nameSchema = schema.pick(['name'])
@@ -27,6 +26,7 @@ function Header() {
   const queryConfig = useQueryConfig()
   const navigate = useNavigate()
   const { setIsAuthenticated, setProfile } = useContext(AppContext)
+  const queryClient = useQueryClient()
 
   const renderLanguagePopover = () => (
     <div className='relative bg-white shadow-md rounded-sm border border-gray-200'>
