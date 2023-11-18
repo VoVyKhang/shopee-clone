@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { ChevronLeftIcon, ChevronRightIcon, ShoppingCartIcon } from 'src/components/Icons'
 import { ProductRating } from 'src/components/ProductRating'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from 'src/utils/utils'
@@ -12,6 +12,7 @@ import DOMPurify from 'dompurify'
 import purchaseApi from 'src/apis/purchase.api'
 import { purchasesStatus } from 'src/constants/purchase'
 import { toast } from 'react-toastify'
+import path from 'src/constants/path'
 
 function ProductDetail() {
   const { nameId } = useParams()
@@ -21,6 +22,7 @@ function ProductDetail() {
   const [buyCount, setBuyCount] = useState(1)
   const imageRef = useRef<HTMLImageElement>(null)
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   const { data: productDetailData } = useQuery({
     queryKey: ['product', id],
@@ -104,7 +106,15 @@ function ProductDetail() {
     )
   }
 
-  console.log(buyCount, product?._id)
+  const buyNow = async () => {
+    const res = await addToCartMutation.mutateAsync({ buy_count: buyCount, product_id: product?._id as string })
+    const purchase = res.data.data
+    navigate(path.cart, {
+      state: {
+        purchaseId: purchase._id
+      }
+    })
+  }
 
   useEffect(() => {
     if (product && product.images.length > 0) {
@@ -208,7 +218,12 @@ function ProductDetail() {
                   <ShoppingCartIcon className='mr-[10px] w-5 h-5 fill-current stroke-orange text-orange' />
                   Thêm Vào Giỏ Hàng
                 </button>
-                <button className='ml-4 flex h-12 min-w-[5rem] justify-center items-center rounded-sm bg-orange px-5 capitalize text-white shadow-sm outline-none hover:bg-orange/90'>
+                <button
+                  className='ml-4 flex h-12 
+                min-w-[5rem] justify-center items-center rounded-sm bg-orange px-5 capitalize text-white 
+                shadow-sm outline-none hover:bg-orange/90'
+                  onClick={buyNow}
+                >
                   Mua ngay
                 </button>
               </div>

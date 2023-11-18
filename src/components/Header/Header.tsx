@@ -27,8 +27,8 @@ function Header() {
   const purchaseInCart = purchasesInCart?.data.data
 
   const renderCardPopover = () => (
-    <div className='relative bg-white shadow-md rounded-sm border border-gray-200 max-w-[400px] text-sm'>
-      {purchaseInCart ? (
+    <div className='relative bg-white shadow-md rounded-sm border border-gray-200 text-sm'>
+      {purchaseInCart && purchaseInCart.length > 0 ? (
         <div className='p-2'>
           <div className='text-gray-400 capitalize'>Sản phẩm mới thêm</div>
           <div className='mt-5'>
@@ -90,7 +90,7 @@ function Header() {
             <Popover placement='bottom-end' renderPopover={renderCardPopover()}>
               <Link to='/' className='relative rounded-sm text-white hover:bg-opacity-90'>
                 <CartIcon />
-                {purchaseInCart && (
+                {purchaseInCart && purchaseInCart.length > 0 && (
                   <span className='absolute top-[-5px] left-[17px] bg-white rounded-full px-[9px] py-[1px] text-orange text-xs'>
                     {purchaseInCart?.length}
                   </span>
