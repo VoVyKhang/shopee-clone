@@ -1,60 +1,30 @@
 import { useContext } from 'react'
-import { Link, createSearchParams, useNavigate } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
-
-import { ArrowDownIcon, CartIcon, GlobalIcon, SearchIcon, ShopeeIconLogo } from '../Icons'
+import { Link } from 'react-router-dom'
+import { useQuery } from 'react-query'
+import { CartIcon, SearchIcon, ShopeeIconLogo } from '../Icons'
 import { Popover } from '../Popover'
 import { AppContext } from 'src/context/app.context'
-import path from 'src/constants/path'
-import useQueryConfig from 'src/hooks/useQueryConfig'
-import { Schema, schema } from 'src/utils/rules'
-import { omit } from 'lodash'
-import authApi from 'src/apis/auth.api'
 import { purchasesStatus } from 'src/constants/purchase'
+import { formatCurrency } from 'src/utils/utils'
+import { NavHeader } from '../NavHeader'
 import purchaseApi from 'src/apis/purchase.api'
 import noProduct from 'src/assets/images/no-product.png'
-import { formatCurrency } from 'src/utils/utils'
+import path from 'src/constants/path'
+import useSearchProducts from 'src/hooks/useSearchProducts'
 
-type FomData = Pick<Schema, 'name'>
-const nameSchema = schema.pick(['name'])
 const MAX_PURCHASES = 5
 
 function Header() {
-  const { isAuthenticated, profile } = useContext(AppContext)
-  const queryConfig = useQueryConfig()
-  const navigate = useNavigate()
-  const { setIsAuthenticated, setProfile } = useContext(AppContext)
-  const queryClient = useQueryClient()
+  const { isAuthenticated } = useContext(AppContext)
+  const { register, onSubmitSearch } = useSearchProducts()
 
-  const renderLanguagePopover = () => (
-    <div className='relative bg-white shadow-md rounded-sm border border-gray-200'>
-      <div className='flex flex-col py-2 px-3 pr-28 pl-3'>
-        <button className='py-2 px-3 hover:text-orange text-left'>Tiếng Việt</button>
-        <button className='py-2 px-3 hover:text-orange text-left'>English</button>
-      </div>
-    </div>
-  )
+  const { data: purchasesInCart } = useQuery({
+    queryKey: ['purchases', { status: purchasesStatus.inCart }],
+    queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart }),
+    enabled: isAuthenticated
+  })
 
-  const renderUserPopover = () => (
-    <div className='relative bg-white shadow-md rounded-sm border border-gray-200'>
-      <div>
-        <Link to={path.profile} className='block w-full text-left py-3 px-4 hover:bg-slate-100 hover:text-cyan-500'>
-          Tài khoản của tôi
-        </Link>
-        <Link to='/' className='block w-full text-left py-3 px-4 hover:bg-slate-100 hover:text-cyan-500'>
-          Đơn mua
-        </Link>
-        <button
-          className='block py-3 w-full text-left px-4 hover:bg-slate-100 hover:text-cyan-500'
-          onClick={handleLogout}
-        >
-          Đăng xuất
-        </button>
-      </div>
-    </div>
-  )
+  const purchaseInCart = purchasesInCart?.data.data
 
   const renderCardPopover = () => (
     <div className='relative bg-white shadow-md rounded-sm border border-gray-200 max-w-[400px] text-sm'>
@@ -94,95 +64,10 @@ function Header() {
     </div>
   )
 
-  const logoutMutation = useMutation({
-    mutationFn: authApi.logout,
-    onSuccess: () => {
-      setIsAuthenticated(false)
-      setProfile(null)
-      queryClient.removeQueries({ queryKey: ['purchases', { status: purchasesStatus.inCart }] })
-    }
-  })
-
-  const handleLogout = () => {
-    logoutMutation.mutate()
-  }
-
-  const { register, handleSubmit } = useForm<FomData>({
-    defaultValues: {
-      name: ''
-    },
-    resolver: yupResolver(nameSchema)
-  })
-
-  const onSubmitSearch = handleSubmit((data) => {
-    const config = queryConfig.order
-      ? omit(
-          {
-            ...queryConfig,
-            name: data.name as string
-          },
-          ['order', 'sort_by']
-        )
-      : {
-          ...queryConfig,
-          name: data.name as string
-        }
-
-    navigate({
-      pathname: path.home,
-      search: createSearchParams(config).toString()
-    })
-  })
-
-  const { data: purchasesInCart } = useQuery({
-    queryKey: ['purchases', { status: purchasesStatus.inCart }],
-    queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart }),
-    enabled: isAuthenticated
-  })
-
-  const purchaseInCart = purchasesInCart?.data.data
-
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
       <div className='container'>
-        <div className='flex justify-end'>
-          <Popover
-            className='flex items-center  py-1 hover:text-white/70 cursor-pointer'
-            renderPopover={renderLanguagePopover()}
-          >
-            <GlobalIcon />
-            <span className='mx-1'>Tiếng Việt</span>
-            <ArrowDownIcon />
-          </Popover>
-
-          {isAuthenticated && (
-            <Popover
-              className='flex items-center py-1 hover:text-white/70 cursor-pointer ml-6'
-              renderPopover={renderUserPopover()}
-            >
-              <div className='w-5 h-5 mr-2 flex-shrink-0'>
-                <img
-                  src='https://down-vn.img.susercontent.com/file/vn-11134004-7r98o-lm70dawd3g7zd8_tn'
-                  alt='avatar'
-                  className='w-full h-full object-cover rounded-full'
-                />
-              </div>
-              <div>{profile?.email} </div>
-            </Popover>
-          )}
-
-          {!isAuthenticated && (
-            <div className='flex items-center'>
-              <Link to={path.register} className='mx-3 capitalize hover:text-white/70'>
-                Đăng ký
-              </Link>
-              <div className='border-r-[1px] border-r-white h-4' />
-              <Link to={path.login} className='mx-3 capitalize hover:text-white/70'>
-                Đăng nhập
-              </Link>
-            </div>
-          )}
-        </div>
+        <NavHeader />
 
         <div className='grid grid-cols-12 gap-4 mt-4 items-end'>
           <Link to='/' className='col-span-2'>

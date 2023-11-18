@@ -190,7 +190,7 @@ export default function Cart() {
                                 name: purchase.product.name,
                                 id: purchase.product._id
                               })}`}
-                              className='h-20 w-20 flex-shrink-0'
+                              className='h-20 w-20 flex-shrink-0 '
                             >
                               <img src={purchase.product.image} alt={purchase.product.name} />
                             </Link>
@@ -200,7 +200,7 @@ export default function Cart() {
                                   name: purchase.product.name,
                                   id: purchase.product._id
                                 })}`}
-                                className='line-clamp-2 '
+                                className='line-clamp-2 text-left'
                               >
                                 {purchase.product.name}
                               </Link>
