@@ -11,9 +11,9 @@ import { ProductList } from 'src/pages/ProductList'
 import { Register } from 'src/pages/Register'
 import { CartLayout } from 'src/layouts/CartLayout'
 import { UserLayout } from 'src/pages/User/layouts/UserLayout'
-import { Profile } from 'src/pages/Profile'
 import { ChangePassword } from 'src/pages/User/pages/ChangePassword'
 import { HistoryPurchase } from 'src/pages/User/pages/HistoryPurchase'
+import { Profile } from 'src/pages/User/pages/Profile'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
