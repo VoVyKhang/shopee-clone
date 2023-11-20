@@ -61,7 +61,7 @@ class Http {
         }
         if (error.response?.status === HttpStatusCode.Unauthorized) {
           clearLS()
-          window.location.reload()
+          // window.location.reload()
         }
         return Promise.reject(error)
       }
