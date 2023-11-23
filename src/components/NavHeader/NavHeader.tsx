@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from 'react-query'
 import { purchasesStatus } from 'src/constants/purchase'
 import authApi from 'src/apis/auth.api'
 import path from 'src/constants/path'
+import userImage from 'src/assets/images/user.svg'
 
 export default function NavHeader() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -71,11 +72,7 @@ export default function NavHeader() {
           renderPopover={renderUserPopover()}
         >
           <div className='w-5 h-5 mr-2 flex-shrink-0'>
-            <img
-              src='https://down-vn.img.susercontent.com/file/vn-11134004-7r98o-lm70dawd3g7zd8_tn'
-              alt='avatar'
-              className='w-full h-full object-cover rounded-full'
-            />
+            <img src={profile?.avatar || userImage} alt='avatar' className='w-full h-full object-cover rounded-full' />
           </div>
           <div>{profile?.email} </div>
         </Popover>
