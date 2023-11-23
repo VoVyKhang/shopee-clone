@@ -1,5 +1,6 @@
+import classNames from 'classnames'
 import { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { DocumentIcon, EditIcon, EyeIcon, UserIcon } from 'src/components/Icons'
 import path from 'src/constants/path'
 import { AppContext } from 'src/context/app.context'
@@ -23,26 +24,50 @@ export default function UserSideNav() {
         </div>
       </div>
       <div className='mt-7'>
-        <Link to={path.profile} className='flex items-center capitalize text-orange transition-colors'>
+        <NavLink
+          to={path.profile}
+          className={({ isActive }) =>
+            classNames('flex items-center capitalize  transition-colors', {
+              'text-orange': isActive,
+              'text-gray-600': !isActive
+            })
+          }
+        >
           <div className='mr-2 h-[20px] w-[20px]'>
             <UserIcon className='w-full h-full' />
           </div>
           Tài khoản của tôi
-        </Link>
+        </NavLink>
 
-        <Link to={path.changePassword} className='mt-4 flex items-center capitalize text-gray-600 transition-colors'>
+        <NavLink
+          to={path.changePassword}
+          className={({ isActive }) =>
+            classNames('flex items-center capitalize mt-4 transition-colors', {
+              'text-orange': isActive,
+              'text-gray-600': !isActive
+            })
+          }
+        >
           <div className='mr-2 h-[20px] w-[20px]'>
             <EyeIcon className='w-full h-full' />
           </div>
           Đổi mật khẩu
-        </Link>
+        </NavLink>
 
-        <Link to={path.historyPurchase} className='mt-4 flex items-center capitalize text-gray-600 transition-colors'>
+        <NavLink
+          to={path.historyPurchase}
+          className={({ isActive }) =>
+            classNames('flex items-center capitalize mt-4 transition-colors', {
+              'text-orange': isActive,
+              'text-gray-600': !isActive
+            })
+          }
+        >
           <div className='mr-2 h-[20px] w-[20px]'>
             <DocumentIcon className='w-full h-full' />
           </div>
           Đơn mua
-        </Link>
+        </NavLink>
       </div>
     </div>
   )
