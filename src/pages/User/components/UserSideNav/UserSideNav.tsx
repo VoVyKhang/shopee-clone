@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { useContext } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { DocumentIcon, EditIcon, EyeIcon, UserIcon } from 'src/components/Icons'
+import { ArrowPathIcon, DocumentIcon, EditIcon, UserIcon } from 'src/components/Icons'
 import path from 'src/constants/path'
 import { AppContext } from 'src/context/app.context'
 import { getAvatarURL } from 'src/utils/utils'
@@ -49,7 +49,7 @@ export default function UserSideNav() {
           }
         >
           <div className='mr-2 h-[20px] w-[20px]'>
-            <EyeIcon className='w-full h-full' />
+            <ArrowPathIcon className='w-full h-full' />
           </div>
           Đổi mật khẩu
         </NavLink>
