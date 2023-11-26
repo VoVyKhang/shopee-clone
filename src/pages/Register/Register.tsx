@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { omit } from 'lodash'
+import omit from 'lodash/omit'
 import { useForm } from 'react-hook-form'
 import { useMutation } from 'react-query'
 import { Link, useNavigate } from 'react-router-dom'
