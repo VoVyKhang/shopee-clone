@@ -12,6 +12,7 @@ import { RatingStars } from '../RatingStars'
 import omit from 'lodash/omit'
 import path from 'src/constants/path'
 import classNames from 'classnames'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   queryConfig: QueryConfig
@@ -25,6 +26,7 @@ const priceScheme = schema.pick(['price_min', 'price_max'])
 function AsideFilter({ queryConfig, categories }: Props) {
   const { category } = queryConfig
   const navigate = useNavigate()
+  const { t } = useTranslation('home')
 
   const {
     control,
@@ -68,7 +70,7 @@ function AsideFilter({ queryConfig, categories }: Props) {
         })}
       >
         <ListIcon />
-        Tất cả danh mục
+        {t('aside filter.all categories')}
       </Link>
       <div className='bg-gray-300 h-[1px] my-4' />
 
@@ -100,7 +102,7 @@ function AsideFilter({ queryConfig, categories }: Props) {
 
       <Link to={path.home} className='flex items-center font-bold mt-4 uppercase'>
         <FilterIcon />
-        Bộ Lọc Tìm Kiếm
+        {t('aside filter.all categories')}
       </Link>
       <div className='bg-gray-300 h-[1px] my-4' />
 

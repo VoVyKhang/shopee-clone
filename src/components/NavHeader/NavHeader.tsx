@@ -8,11 +8,15 @@ import { purchasesStatus } from 'src/constants/purchase'
 import authApi from 'src/apis/auth.api'
 import path from 'src/constants/path'
 import { getAvatarURL } from 'src/utils/utils'
+import { useTranslation } from 'react-i18next'
+import { locales } from 'src/i18n/i18n'
 
 export default function NavHeader() {
   const { isAuthenticated, profile } = useContext(AppContext)
   const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const queryClient = useQueryClient()
+  const { i18n } = useTranslation()
+  const currentLanguage = locales[i18n.language as keyof typeof locales]
 
   const logoutMutation = useMutation({
     mutationFn: authApi.logout,
@@ -27,11 +31,19 @@ export default function NavHeader() {
     logoutMutation.mutate()
   }
 
+  const changeLanguage = (lng: 'en' | 'vi') => {
+    i18n.changeLanguage(lng)
+  }
+
   const renderLanguagePopover = () => (
     <div className='relative bg-white shadow-md rounded-sm border border-gray-200'>
       <div className='flex flex-col py-2 px-3 pr-28 pl-3'>
-        <button className='py-2 px-3 hover:text-orange text-left'>Tiếng Việt</button>
-        <button className='py-2 px-3 hover:text-orange text-left'>English</button>
+        <button className='py-2 px-3 hover:text-orange text-left' onClick={() => changeLanguage('vi')}>
+          Tiếng Việt
+        </button>
+        <button className='py-2 px-3 hover:text-orange text-left' onClick={() => changeLanguage('en')}>
+          English
+        </button>
       </div>
     </div>
   )
@@ -62,7 +74,7 @@ export default function NavHeader() {
         renderPopover={renderLanguagePopover()}
       >
         <GlobalIcon />
-        <span className='mx-1'>Tiếng Việt</span>
+        <span className='mx-1'>{currentLanguage}</span>
         <ArrowDownIcon />
       </Popover>
 

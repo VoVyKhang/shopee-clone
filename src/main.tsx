@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { AppProvider } from './context/app.context'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import 'src/i18n/i18n'
 
 const queryClient = new QueryClient({
   defaultOptions: {
